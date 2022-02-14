@@ -2,7 +2,10 @@ package Product;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.groupingBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import org.junit.jupiter.api.Test;
 
@@ -23,9 +26,24 @@ class ProductTests {
                  sparklingWine, whiteWine,
                  groundCoffee, instantCoffee);
         // when
-        long quantity = allProducts.stream().count();
+        long quantity = allProducts.size();
         // then
         assertThat(quantity).isEqualTo(6L);
+    }
+
+    @Test
+    public void shouldSortByCategory() {
+        // given
+        List<Product> allProducts = Arrays.asList
+                (coconutMilk, soyaMilk,
+                        sparklingWine, whiteWine,
+                        groundCoffee, instantCoffee);
+        // when
+        Map<Category, List<Product>> productsByCategory = allProducts.stream().collect(groupingBy(Product::getCategory));
+        // then
+        assertThat(productsByCategory.get(Category.MILK).size()).isEqualTo(2);
+        assertThat(productsByCategory.get(Category.WINE).size()).isEqualTo(2);
+        assertThat(productsByCategory.get(Category.COFFEE).size()).isEqualTo(2);
     }
 
     @Test
