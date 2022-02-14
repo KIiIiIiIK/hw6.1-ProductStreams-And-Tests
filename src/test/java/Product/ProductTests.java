@@ -1,12 +1,14 @@
 package Product;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
-
 import static java.util.stream.Collectors.groupingBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class ProductTests {
@@ -36,8 +38,8 @@ class ProductTests {
         // given
         List<Product> allProducts = Arrays.asList
                 (coconutMilk, soyaMilk,
-                        sparklingWine, whiteWine,
-                        groundCoffee, instantCoffee);
+                 sparklingWine, whiteWine,
+                 groundCoffee, instantCoffee);
         // when
         Map<Category, List<Product>> productsByCategory = allProducts.stream().collect(groupingBy(Product::getCategory));
         // then
@@ -72,5 +74,20 @@ class ProductTests {
         long count2 = nameHasParticleRo.count();
         // then
         assertThat(count2).isEqualTo(3L);
+    }
+
+    @Test
+    public void shouldBeListInAlphabeticOrder() {
+        // given
+        List<String> allProducts = Arrays.asList
+                (coconutMilk.name, soyaMilk.name,
+                 sparklingWine.name, whiteWine.name,
+                 groundCoffee.name, instantCoffee.name);
+        // when
+        List<String> sortedList = allProducts.stream().sorted(Comparator.naturalOrder()).toList();
+        // then
+        Assertions.assertThat(sortedList).containsExactly("Alpro ", "Aroy-D ",
+                                                          "Illy ", "Jacobs ",
+                                                          "Marlborough Sun ","Veuve Clicquot ");
     }
 }
